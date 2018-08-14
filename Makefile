@@ -1,3 +1,10 @@
-enumerate:
-	gcc -I/opt/MVS/include -L/opt/MVS/lib/64/ -lMvCameraControl -shared enumerate.c -o libenumerate.so
-	gcc -I./ -L./ -lenumerate main.cpp
+all: libenumerate.so main
+main: main.c
+	gcc -I./ main.c -o main -L./ -lenumerate
+libenumerate.so: enumerate.c
+	gcc -Wall -I /opt/MVS/include/ enumerate.c -shared -o libenumerate.so -L /opt/MVS/lib/64/ -lMvCameraControl
+clean:
+	rm libenumerate.so main
+test:
+	LD_LIBRARY_PATH=./ ./main
+	python3 main.py
